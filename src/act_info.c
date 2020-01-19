@@ -4768,6 +4768,10 @@ void do_nscore( CHAR_DATA *ch, char *argument )
 	printf_to_char(ch,"{G| Korkak: {R%-5d{G      | ZZ : {R%-3d{G     | GörevZ: {R%-2d{G                     |\n\r",victim->wimpy,GET_DAMROLL(victim),IS_NPC(victim) ? 0 :((IS_SET(victim->act, PLR_QUESTOR))?(victim->pcdata->countdown):(victim->pcdata->nextquest)));
 	printf_to_char(ch,"{G|                    | Kar: {R%-2d(%-2d){G  |                                |{x\n\r",victim->perm_stat[STAT_CHA],get_curr_stat(victim,STAT_CHA));
 	printf_to_char(ch,"{G|--------------------'--------------'--------------------------------|{x\n\r");
+	if ( !IS_NPC(ch) && ch->pcdata->condition[COND_HUNGER]   <=  0 )
+		printf_to_char(ch,"{G| {Raçsýn{G                                                           |{x\n\r");
+	if ( !IS_NPC(ch) && ch->pcdata->condition[COND_THIRST]   <=  0 )
+		printf_to_char(ch,"{G| {Rsusuzsun{G                                                       |{x\n\r");
 	printf_to_char(ch,"{G| {RDayanýklýlýklar{G                                                    |{x\n\r");
 	printf_to_char(ch,"{G| teshir:%s çaðrý :%s büyü :%s silah   :%s ezici:%s delici:%s kesici :%s    |{x\n\r",(victim->res_flags  & IMM_CHARM)?"{R+{G":" ",(victim->res_flags  & IMM_SUMMON)?"{R+{G":" ",(victim->res_flags  & IMM_MAGIC)?"{R+{G":" ",(victim->res_flags  & IMM_WEAPON)?"{R+{G":" ",(victim->res_flags  & IMM_BASH)?"{R+{G":" ",(victim->res_flags  & IMM_PIERCE)?"{R+{G":" ",(victim->res_flags  & IMM_SLASH)?"{R+{G":" ");
 	printf_to_char(ch,"{G| emici :%s ateþ  :%s ayaz :%s þimþek  :%s asit :%s zehir :%s negatif:%s    |{x\n\r",(victim->res_flags  & IMM_DROWNING)?"{R+{G":" ",(victim->res_flags  & IMM_FIRE)?"{R+{G":" ",(victim->res_flags  & IMM_COLD)?"{R+{G":" ",(victim->res_flags  & IMM_LIGHTNING)?"{R+{G":" ",(victim->res_flags  & IMM_ACID)?"{R+{G":" ",(victim->res_flags  & IMM_POISON)?"{R+{G":" ",(victim->res_flags  & IMM_NEGATIVE)?"{R+{G":" ");
