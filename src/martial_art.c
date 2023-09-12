@@ -1494,7 +1494,7 @@ void do_assassinate( CHAR_DATA *ch, char *argument )
   char arg[MAX_INPUT_LENGTH];
   CHAR_DATA *victim;
   char buf[MAX_STRING_LENGTH];
-  int chance = 0;
+  int chance = 80;
   OBJ_DATA *obj;
 
   if ( MOUNTED(ch) )
@@ -1569,10 +1569,10 @@ void do_assassinate( CHAR_DATA *ch, char *argument )
 
   WAIT_STATE( ch, skill_table[gsn_assassinate].beats );
 
-  chance += int( get_curr_stat( ch , STAT_INT ) / 4 );
-  chance += int( get_curr_stat( ch , STAT_WIS ) / 4 );
-  chance += int( get_curr_stat( ch , STAT_DEX ) / 4 );
-  chance += int( ( get_skill( ch , gsn_assassinate ) - 75 ) / 2 ) ;
+  chance += int( get_curr_stat( ch , STAT_INT ) / 2 );
+  chance += int( get_curr_stat( ch , STAT_WIS ) / 2 );
+  chance += int( get_curr_stat( ch , STAT_DEX ) / 2 );
+  chance += int( ( get_skill( ch , gsn_assassinate ) - 50 ) / 2 ) ;
 
   obj = get_eq_char( ch, WEAR_HANDS );
 
