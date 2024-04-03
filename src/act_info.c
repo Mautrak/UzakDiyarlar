@@ -1760,7 +1760,7 @@ void do_exits( CHAR_DATA *ch, char *argument )
         }
         else
         {
-            snprintf(buf + strlen(buf), BUF_SIZE - strlen(buf), "%-5s - %s",
+            snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "%-5s - %s",
                 capitalize(dir_name[door]),
                 room_dark(pexit->u1.to_room) ? "Zifiri karanlýk" : pexit->u1.to_room->name);
 		if (IS_IMMORTAL(ch))

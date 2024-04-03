@@ -57,6 +57,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "merc.h"
