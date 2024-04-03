@@ -616,7 +616,7 @@ void *hash_remove(struct hash_header *ht,int key)
 
 void room_iterate(ROOM_INDEX_DATA *rb[],void (*func)(int, ROOM_INDEX_DATA *, void * ),void *cdata)
 {
-  register int i;
+  int i;
 
   for(i=0;i<WORLD_SIZE;i++)
     {
@@ -635,7 +635,7 @@ void hash_iterate(struct hash_header *ht,void (*func)(int, void*,void*),void *cd
   for(i=0;i<ht->klistlen;i++)
     {
       void		*temp;
-      register int	key;
+      int	key;
 
       key = ht->keylist[i];
       temp = hash_find(ht,key);
@@ -2071,7 +2071,7 @@ void auction_update (void)
             sprintf (buf, "%s: %d akçeye gidiyor.", auction->item->short_descr,auction->bet);
             else
             sprintf (buf, "%s: henüz teklif yok.", auction->item->short_descr);
-	          sprintf(bufc,"%s%s%s",CLR_CYAN,buf,CLR_WHITE_BOLD);
+	          snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_CYAN, buf, CLR_WHITE_BOLD);
             talk_auction (bufc);
             break;
 
@@ -2083,7 +2083,7 @@ void auction_update (void)
                     auction->item->short_descr,
                     IS_NPC(auction->buyer) ? auction->buyer->short_descr : auction->buyer->name,
                     auction->bet);
-	        sprintf(bufc,"%s%s%s",CLR_CYAN,buf,CLR_WHITE_BOLD);
+	        snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_CYAN, buf, CLR_WHITE_BOLD);
                 talk_auction(bufc);
                 obj_to_char (auction->item,auction->buyer);
                 act ("Mezatçý yanýnda belirerek $p eþyasýný sana veriyor.",
@@ -2099,10 +2099,10 @@ void auction_update (void)
             else /* not sold */
             {
               sprintf (buf, "%s teklif gelmediði için mezattan çekildi.",auction->item->short_descr);
-			  sprintf(bufc,"%s%s%s",CLR_CYAN,buf,CLR_WHITE_BOLD);
+			  snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_CYAN, buf, CLR_WHITE_BOLD);
               talk_auction(bufc);
               sprintf (buf, "Mezatçý satýlmayan eþyayý depoya kaldýrýyor.");
-			  sprintf(bufc,"%s%s%s",CLR_RED,buf,CLR_WHITE_BOLD);
+			  snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_RED, buf, CLR_WHITE_BOLD);
               talk_auction(bufc);
                 extract_obj(auction->item);
                 auction->item = NULL; /* clear auction */
@@ -2153,7 +2153,7 @@ void do_auction (CHAR_DATA *ch, char *argument)
             sprintf (buf, "Bu objeye son verilen teklif %d akçe.\n\r",auction->bet);
             else
             sprintf (buf, "Henüz teklif verilmedi.\n\r");
-	    sprintf(bufc,"%s%s%s",CLR_GREEN,buf,CLR_WHITE_BOLD);
+	    snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_GREEN, buf, CLR_WHITE_BOLD);
             send_to_char (bufc,ch);
 	    spell_identify(0, 0, ch, auction->item,0);
             return;
@@ -2182,7 +2182,7 @@ void do_auction (CHAR_DATA *ch, char *argument)
     else /* stop the auction */
     {
       sprintf(buf,"%s objesinin satýþý bir ölümsüz tarafýndan durduruldu.",auction->item->short_descr);
-	sprintf(bufc,"%s%s%s",CLR_WHITE,buf,CLR_WHITE_BOLD);
+	  snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_WHITE, buf, CLR_WHITE_BOLD);
         talk_auction(bufc);
         obj_to_char(auction->item, auction->seller);
         auction->item = NULL;
@@ -2243,7 +2243,7 @@ void do_auction (CHAR_DATA *ch, char *argument)
             auction->pulse = PULSE_AUCTION; /* start the auction over again */
 
             sprintf (buf,"%s için %d akçe teklif edildi.\n\r",auction->item->short_descr,newbet);
-	    sprintf(bufc,"%s%s%s",CLR_MAGENTA,buf,CLR_WHITE_BOLD);
+	        snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_MAGENTA, buf, CLR_WHITE_BOLD);
             talk_auction (bufc);
             return;
 
@@ -2304,7 +2304,7 @@ void do_auction (CHAR_DATA *ch, char *argument)
         auction->going = 0;
 
         sprintf(buf, "%s mezatta.", obj->short_descr);
-	sprintf(bufc,"%s%s%s",CLR_YELLOW,buf,CLR_WHITE_BOLD);
+	    snprintf(bufc, sizeof(bufc), "%s%s%s", CLR_YELLOW, buf, CLR_WHITE_BOLD);
         talk_auction(bufc);
 
         return;

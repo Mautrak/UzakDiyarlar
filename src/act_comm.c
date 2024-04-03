@@ -366,8 +366,7 @@ void do_kd(CHAR_DATA* ch, char* argument) {
     else {
         int result = snprintf(buf, sizeof(buf), "%s", argument);
         if (result >= sizeof(buf)) {
-            // Handle overflow: truncate or use dynamic buffer
-            // ... (Implement appropriate overflow handling)
+            buf[sizeof(buf) - 1] = '\0';
         }
     }
 
@@ -1983,7 +1982,7 @@ char char_lang_lookup(char c) {
 char* translate(CHAR_DATA* ch, CHAR_DATA* victim, char* argument) {
     static char trans[MAX_STRING_LENGTH];
     char translated_buf[MAX_STRING_LENGTH]; // Buffer for translation
-    int i, length;
+    int i;
 
     // Early return for simple cases
     if (*argument == '\0' || !ch || !victim || IS_NPC(ch) || IS_NPC(victim) ||
@@ -1998,17 +1997,6 @@ char* translate(CHAR_DATA* ch, CHAR_DATA* victim, char* argument) {
         }
         return trans;
     }
-
-    // Calculate maximum possible translated length (including language info)
-    size_t max_trans_len = strlen(language_table[ch->language].name) + strlen(argument) + 3; // +3 for "()", space, and null terminator
-
-    // Check if translation would overflow
-    if (max_trans_len >= sizeof(trans)) {
-        // Handle overflow: truncate or use dynamic buffer
-        // ... (Implement appropriate overflow handling)
-        return trans; // Return empty or truncated string for now
-    }
-
     // Translate the argument character by character
     for (i = 0; argument[i] != '\0' && i < sizeof(translated_buf) - 1; i++) {
         translated_buf[i] = char_lang_lookup(argument[i]);
@@ -2016,11 +2004,10 @@ char* translate(CHAR_DATA* ch, CHAR_DATA* victim, char* argument) {
     translated_buf[i] = '\0'; // Ensure null termination
 
     // Safely format the translated text with language info
-    int result = snprintf(trans, sizeof(trans), "(%s) %s", language_table[ch->language].name, translated_buf);
-    if (result >= sizeof(trans)) {
-        // Handle overflow: truncate or use dynamic buffer
-       // ... (Implement appropriate overflow handling)
-    }
+    snprintf(trans, sizeof(trans), "(%s) %s", language_table[ch->language].name, translated_buf);
+    // The snprintf function automatically handles buffer overflow by truncating the string
+    // and ensures the string is null-terminated. No need to repeat the snprintf call or check result.
+
     return trans;
 }
 

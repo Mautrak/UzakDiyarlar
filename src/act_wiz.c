@@ -5556,27 +5556,58 @@ void do_reboot( CHAR_DATA *ch, char *argument )
 }
 
 
-void reboot_uzakdiyarlar( bool fmessage )
-{
+void reboot_uzakdiyarlar(bool fmessage) {
     extern bool merc_down;
-    DESCRIPTOR_DATA *d,*d_next;
+    DESCRIPTOR_DATA* d, * d_next;
 
-    sprintf( log_buf, "Oyun yeniden baslatiliyor.");
+    sprintf(log_buf, "Oyun yeniden baslatiliyor.");
     log_string(log_buf);
+
     merc_down = TRUE;
-    for ( d = descriptor_list; d != NULL; d = d_next )
-    {
-	d_next = d->next;
-	if (fmessage)
-	   write_to_buffer(d,"***** UD ÞÝMDÝ YENÝDEN BAÞLATILIYOR! *****\n\r",0);
-        if (d->character != NULL)
-	{
-	   update_total_played(d->character);
-	   save_char_obj(d->character);
-	}
-    	close_socket(d);
+
+    for (d = descriptor_list; d != NULL; d = d_next) {
+        d_next = d->next;
+        if (fmessage) {
+            write_to_buffer(d, "***** UD ÞÝMDÝ YENÝDEN BAÞLATILIYOR! *****\n\r", 0);
+        }
+        if (d->character != NULL) {
+            update_total_played(d->character);
+            save_char_obj(d->character);
+        }
+        close_socket(d);
     }
-    return;
+
+    // Unix-specific reboot logic
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        perror("reboot_uzakdiyarlar: fork");
+        exit(1); // Handle fork error
+    }
+    else if (pid == 0) {
+        // Child process
+        char* argv[] = { "../area/uzakdiyarlar", NULL }; // Path to executable in /area folder
+        execv(argv[0], argv);
+        perror("reboot_uzakdiyarlar: execv");
+        exit(1); // Handle execv error
+    }
+    else {
+        // Parent process
+        int status;
+        waitpid(pid, &status, 0); // Wait for child process to terminate
+
+        // Check if child process exited successfully
+        if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+            // Child process started successfully, exit parent
+            exit(0);
+        }
+        else {
+            // Child process failed to start, log error and exit
+            sprintf(log_buf, "reboot_uzakdiyarlar: Child process failed to start (status: %d)", status);
+            log_string(log_buf);
+            exit(1);
+        }
+    }
 }
 
 

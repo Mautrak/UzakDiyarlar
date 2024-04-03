@@ -21,18 +21,22 @@
 extern int max_on;
 extern int max_on_so_far;
 
-void ud_data_write(void)
-{
-	FILE *data;
-	int suan;
+void ud_data_write(void) {
+    FILE* data;
+    int suan;
+    cevrimici_oyuncu_sayisi();
 
-	cevrimici_oyuncu_sayisi();
-	system("rm -f ../data/ud_data");
-	data=fopen("../data/ud_data","a");
-	fprintf(data,"* Cevrimici oyuncu rekoru\n");
-	fprintf(data,"Encokcevrimici %d\n",max_on_so_far);
-	fprintf(data,"End\n");
-	fclose(data);
+    // Check return value of system
+    int result = system("rm -f ../data/ud_data");
+    if (result != 0) {
+        bug("Error deleting ud_data file", 0); // Log the error
+    }
+
+    data = fopen("../data/ud_data", "a");
+    fprintf(data, "* Cevrimici oyuncu rekoru\n");
+    fprintf(data, "Encokcevrimici %d\n", max_on_so_far);
+    fprintf(data, "End\n");
+    fclose(data);
 }
 
 void ud_data_read(void)
@@ -73,7 +77,7 @@ void write_channel_log(CHAR_DATA* ch, CHAR_DATA* vc, int kanal, char* argument) 
     FILE* data;
     char filename[MAX_STRING_LENGTH];
     char buf[1024]; // Increased buffer size for safe operation
-    char bug_message[MAX_STRING_LENGTH]; // For formatting messages for bug()
+    char bug_message[MAX_STRING_LENGTH * 2]; // For formatting messages for bug()
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 
