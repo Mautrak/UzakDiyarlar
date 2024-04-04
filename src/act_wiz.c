@@ -5558,7 +5558,7 @@ void do_reboot( CHAR_DATA *ch, char *argument )
 }
 
 
-void reboot_uzakdiyarlar(bool fmessage) {
+void reboot_uzakdiyarlar(bool fmessage, int listen_socket) {
     extern bool merc_down;
     DESCRIPTOR_DATA* d, * d_next;
 
@@ -5588,6 +5588,7 @@ void reboot_uzakdiyarlar(bool fmessage) {
     }
     else if (pid == 0) {
         // Child process
+        close(listen_socket); // Close inherited listening socket
         char* argv[] = { "../area/uzakdiyarlar", NULL }; // Path to executable in /area folder
         execv(argv[0], argv);
         perror("reboot_uzakdiyarlar: execv");
