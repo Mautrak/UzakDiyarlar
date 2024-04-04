@@ -475,64 +475,66 @@ int main( int argc, char **argv )
 
 
 #if defined(unix)
-int init_socket( int port )
+int init_socket(int port)
 {
-    static struct sockaddr_in sa_zero;
-    struct sockaddr_in sa;
-    int x = 1;
-    int fd;
+	static struct sockaddr_in sa_zero;
+	struct sockaddr_in sa;
+	int x = 1;
+	int fd;
 
-    if ( ( fd = socket( AF_INET, SOCK_STREAM, 0 ) ) < 0 )
-    {
-	perror( "Init_socket: socket" );
-	exit( 1 );
-    }
-
-    if ( setsockopt( fd, SOL_SOCKET, SO_REUSEADDR,
-    (char *) &x, sizeof(x) ) < 0 )
-    {
-	perror( "Init_socket: SO_REUSEADDR" );
-	close(fd);
-	exit( 1 );
-    }
-
-#if defined(SO_DONTLINGER) && !defined(SYSV)
-    {
-	struct	linger	ld;
-
-	ld.l_onoff  = 1;
-	ld.l_linger = 1000;
-
-	if ( setsockopt( fd, SOL_SOCKET, SO_DONTLINGER,
-	(char *) &ld, sizeof(ld) ) < 0 )
-	{
-	    perror( "Init_socket: SO_DONTLINGER" );
-	    close(fd);
-	    exit( 1 );
+	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		perror("Init_socket: socket");
+		exit(1);
 	}
-    }
+
+	// Set SO_REUSEADDR option before binding
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*)&x, sizeof(x)) < 0) {
+		perror("Init_socket: SO_REUSEADDR");
+		close(fd);
+		exit(1);
+	}
+
+	// Set SO_REUSEPORT option
+#ifdef SO_REUSEPORT
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, (char*)&x, sizeof(x)) < 0) {
+		perror("Init_socket: SO_REUSEPORT");
+		close(fd);
+		exit(1);
+	}
 #endif
 
-    sa		    = sa_zero;
-    sa.sin_family   = AF_INET;
-    sa.sin_port	    = htons( port );
+#if defined(SO_DONTLINGER) && !defined(SYSV)
+	{
+		struct linger ld;
 
-    if ( bind( fd, (struct sockaddr *) &sa, sizeof(sa) ) < 0 )
-    {
-	perror("Init socket: bind" );
-	close(fd);
-	exit(1);
-    }
+		ld.l_onoff = 1;
+		ld.l_linger = 1000;
 
+		if (setsockopt(fd, SOL_SOCKET, SO_DONTLINGER, (char*)&ld, sizeof(ld)) < 0) {
+			perror("Init_socket: SO_DONTLINGER");
+			close(fd);
+			exit(1);
+		}
+	}
+#endif
 
-    if ( listen( fd, 3 ) < 0 )
-    {
-	perror("Init socket: listen");
-	close(fd);
-	exit(1);
-    }
+	sa = sa_zero;
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(port);
 
-    return fd;
+	if (bind(fd, (struct sockaddr*)&sa, sizeof(sa)) < 0) {
+		perror("Init socket: bind");
+		close(fd);
+		exit(1);
+	}
+
+	if (listen(fd, 3) < 0) {
+		perror("Init socket: listen");
+		close(fd);
+		exit(1);
+	}
+
+	return fd;
 }
 #endif
 
