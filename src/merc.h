@@ -3104,7 +3104,6 @@ bool	check_ban	args( ( char *site, int type) );
 
 
 /* comm.c */
-extern int control;
 void	show_string	args( ( struct descriptor_data *d, char *input) );
 void	close_socket	args( ( DESCRIPTOR_DATA *dclose ) );
 void	write_to_buffer	args( ( DESCRIPTOR_DATA *d, const char *txt,

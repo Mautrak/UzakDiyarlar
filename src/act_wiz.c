@@ -2383,7 +2383,7 @@ void do_shutdow( CHAR_DATA *ch, char *argument )
 
 
 
-void do_shutdown( CHAR_DATA *ch, char *argument, int control)
+void do_shutdown( CHAR_DATA *ch, char *argument )
 {
     char buf[MAX_STRING_LENGTH];
 
@@ -5491,7 +5491,7 @@ void do_find( CHAR_DATA *ch, char *argument )
 }
 
 
-void do_reboot( CHAR_DATA *ch, char *argument, int control)
+void do_reboot( CHAR_DATA *ch, char *argument )
 {
   char arg[MAX_INPUT_LENGTH];
   char buf[MAX_STRING_LENGTH];
