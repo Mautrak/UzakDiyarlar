@@ -2066,7 +2066,7 @@ void update_handler( void )
 	quest_update    ( );
   ikikat_update    ( );
 	obj_update	( );
-	check_reboot(control);
+	check_reboot	( );
 
 	/* room counting */
 	{
@@ -2467,7 +2467,7 @@ void room_affect_update( void )
 
 
 
-void check_reboot(int control)	
+void check_reboot( void )
 {
  char buf[MAX_STRING_LENGTH];
  DESCRIPTOR_DATA *d;
