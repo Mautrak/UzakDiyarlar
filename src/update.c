@@ -2487,7 +2487,7 @@ void check_reboot(int control)
   case -1:
      break;
   case 0:
-	 reboot_uzakdiyarlar(TRUE, control);
+     reboot_uzakdiyarlar(TRUE);
      return;
   case 1:
   case 2:

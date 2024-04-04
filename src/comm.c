@@ -384,7 +384,7 @@ int main( int argc, char **argv )
 {
     struct timeval now_time;
     int port;
-	bool fmessage = false;
+
 #if defined(unix)
     int control;
 #endif

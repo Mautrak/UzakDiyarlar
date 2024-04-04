@@ -2394,7 +2394,7 @@ void do_shutdown( CHAR_DATA *ch, char *argument )
     if (ch->invis_level < LEVEL_HERO)
     	do_duyuru( ch, buf );
     cleanup_memory();
-    reboot_uzakdiyarlar(FALSE, control);
+    reboot_uzakdiyarlar(FALSE);
     return;
 }
 
@@ -5522,7 +5522,7 @@ void do_reboot( CHAR_DATA *ch, char *argument )
     if (is_name(arg, (char*)"now"))
      {
       cleanup_memory();
-      reboot_uzakdiyarlar(TRUE, control);
+      reboot_uzakdiyarlar(TRUE);
       return;
     }
 
@@ -5558,7 +5558,7 @@ void do_reboot( CHAR_DATA *ch, char *argument )
 }
 
 
-void reboot_uzakdiyarlar(bool fmessage, int control) {
+void reboot_uzakdiyarlar(bool fmessage, int listen_socket) {
     extern bool merc_down;
     DESCRIPTOR_DATA* d, * d_next;
 
@@ -5588,7 +5588,7 @@ void reboot_uzakdiyarlar(bool fmessage, int control) {
     }
     else if (pid == 0) {
         // Child process
-        close(control); // Close inherited listening socket
+        close(listen_socket); // Close inherited listening socket
         char* argv[] = { "../area/uzakdiyarlar", NULL }; // Path to executable in /area folder
         execv(argv[0], argv);
         perror("reboot_uzakdiyarlar: execv");

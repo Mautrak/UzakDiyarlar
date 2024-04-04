@@ -3097,7 +3097,7 @@ bool limit_kontrol args( (CHAR_DATA *ch, OBJ_DATA *obj) );
 /* act_wiz.c */
 void wiznet		args( (const char *string, CHAR_DATA *ch, OBJ_DATA *obj,
 			       long flag, long flag_skip, int min_level ) );
-void reboot_uzakdiyarlar(bool fmessage, int control);
+void reboot_uzakdiyarlar	args( ( bool fmessage) );
 
 /* ban.c */
 bool	check_ban	args( ( char *site, int type) );
