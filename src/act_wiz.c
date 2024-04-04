@@ -5554,7 +5554,7 @@ void do_reboot( CHAR_DATA *ch, char *argument, int control)
     }
 
     
- do_reboot(ch,(char*)"");
+ do_reboot(ch,(char*)"", control);
 }
 
 
