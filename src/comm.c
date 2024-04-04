@@ -475,27 +475,23 @@ int main( int argc, char **argv )
 
 
 #if defined(unix)
-int init_socket( int port )
-{
-    static struct sockaddr_in sa_zero;
-    struct sockaddr_in sa;
-    int x = 1;
-    int fd;
+int init_socket(int port) {
+	static struct sockaddr_in sa_zero;
+	struct sockaddr_in sa;
+	int x = 1;
+	int fd;
 
-    if ( ( fd = socket( AF_INET, SOCK_STREAM, 0 ) ) < 0 )
-    {
-	perror( "Init_socket: socket" );
-	exit( 1 );
-    }
+	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		perror("Init_socket: socket");
+		exit(1);
+	}
 
-    if ( setsockopt( fd, SOL_SOCKET, SO_REUSEADDR,
-    (char *) &x, sizeof(x) ) < 0 )
-    {
-	perror( "Init_socket: SO_REUSEADDR" );
-	close(fd);
-	exit( 1 );
-    }
-
+	// Set SO_REUSEADDR before bind
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*)&x, sizeof(x)) < 0) {
+		perror("Init_socket: SO_REUSEADDR");
+		close(fd);
+		exit(1);
+	}
 #if defined(SO_DONTLINGER) && !defined(SYSV)
     {
 	struct	linger	ld;

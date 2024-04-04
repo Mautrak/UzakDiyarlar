@@ -5521,6 +5521,7 @@ void do_reboot( CHAR_DATA *ch, char *argument )
 
     if (is_name(arg, (char*)"now"))
      {
+      cleanup_memory();
       reboot_uzakdiyarlar(TRUE);
       return;
     }
@@ -5552,7 +5553,7 @@ void do_reboot( CHAR_DATA *ch, char *argument )
      return;
     }
 
-    cleanup_memory();
+    
  do_reboot(ch,(char*)"");
 }
 
