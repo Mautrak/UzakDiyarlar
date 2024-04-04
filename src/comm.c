@@ -454,16 +454,12 @@ int main( int argc, char **argv )
 	ud_data_read();
 
 #if defined(unix)
-	control = init_socket(port);
-	boot_db();
-	sprintf(log_buf, "UD %d portunda kullanýma hazýr.", port);
-	log_string(log_buf);
-
-	// Pass 'control' (listening socket descriptor) to reboot_uzakdiyarlar
-	reboot_uzakdiyarlar(fmessage, control);
-
-	game_loop_unix(control);
-	close(control);
+    control = init_socket( port );
+    boot_db( );
+		sprintf( log_buf, "UD %d portunda kullanýma hazýr.", port );
+    log_string( log_buf );
+    game_loop_unix( control );
+    close (control);
 #endif
 
     log_area_popularity();
